@@ -1,0 +1,22 @@
+[
+    {
+        "id": "FTC-001",
+        "name": "Aether Knight",
+        "description": "A legendary knight who harnesses the ethereal powers of the Aether, wielding them to maintain balance across the realms.",
+        "age": 457,
+        "isActive": true,
+        "birthDate": "1567-03-05",
+        "imageUrl": "https://example.com/images/aether-knight.jpg",
+        "rarity": "Legendary",
+        "abilities": ["Teleportation", "Energy Manipulation", "Dimensional Travel"],
+        "element": "Aether",
+        "guildAffiliation": {
+          "id": "GUILD-009",
+          "name": "Order of the Cosmic Veil",
+          "guildMaster": "Celestial Mage",
+          "guildEmblemUrl": "https://example.com/images/guilds/cosmic-veil-emblem.jpg",
+          "foundedYear": 1423,
+          "motto": "Balance in All, All in Balance"
+        }
+      }
+]
