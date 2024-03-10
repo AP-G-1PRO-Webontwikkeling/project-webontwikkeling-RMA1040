@@ -96,7 +96,7 @@ Zephyr can command the air to create powerful gusts, form tornadoes, and even fl
 
 Solara has the power to illuminate the darkest corners, blind enemies with brilliant flashes, and harness the sun's energy to heal and rejuvenate allies.
 
- Noctis can blend into darkness, manipulate dark energy to confound and weaken enemies, and travel through shadows to appear anywhere unannounced.
+Noctis can blend into darkness, manipulate dark energy to confound and weaken enemies, and travel through shadows to appear anywhere unannounced.
 
 Frostine can freeze anything with a touch, summon blizzards to chill her foes, and create ice constructs for offense and defense.
 
@@ -117,6 +117,8 @@ Ice - Symbolizes clarity, resilience, and stasis.
 Lightning - Denotes speed, unpredictability, and electrical power.
 Metal - Embodies durability, craftsmanship, and precision.
 Nature - Represents life, interconnectedness, and renewal.
+
+/////////// weaopons.json ///////////////////////
 
 Weapon:
 Blaze :     weapon_name": "Eternal Flame Lantern",
