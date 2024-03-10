@@ -1,0 +1,20 @@
+{
+  "name": "project-webontwikkeling-rma1040",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.25",
+    "@types/readline-sync": "^1.4.8",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
