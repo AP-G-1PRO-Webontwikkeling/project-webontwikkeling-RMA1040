@@ -1,52 +1,67 @@
 import * as readline from 'readline-sync';
-import characters from `./json/characters.json`;
-import weapons from `./json/weapons.json`;
+import characters from './json/characters.json';
+import weapons from './json/weapons.json';
 
-export interface Character {
-    ID: string,
-    Names: string,
-    Description: string,
-    Age: number,
-    Birthday: number,
-    isAlive: Boolean,
-    imageUrl: string,
-    abilties: string[],
-    Elements: string,
-    Weapons: Weapons
-};
-
-export interface Weapons{
-    Weapons: string,
-    weapon_name: string,
-    weapon_id: string,
-    weapon_power: number,
-    Origin: string,
-    description: string,
-    downside: string
-};
-
-
-console.log(`\x1b[32mWelcome to the Elementex\x1b[0m`);
-console.log()
-console.log(`\x1b[34m1. View complete data\x1b[0m`)
-console.log(`\x1b[34m2. Filter by ID\x1b[0m`)
-console.log(`\x1b[31m3. Exit\x1b[0m`)
-console.log()
-
-let choice:number = readline.questionInt("Please enter your choice (enter 1, 2 or 3): ");
-if (choice === 1)
-{
-    characters.forEach(character => console.log(character.Names));
+interface Character {
+    ID: string;
+    Names: string;
+    Description: string;
+    Age: number;
+    Birthday: string;
+    isAlive: boolean;
+    imageUrl: string;
+    abilities: string[];
+    Elements: string;
+    Weapons: Weapon;
 }
-else if (choice ===2)
-{
 
+interface Weapon {
+    weapon_name: string;
+    weapon_id: string;
+    weapon_power: number;
+    Origin: string;
+    description: string;
+    downside: string;
 }
-else if(choice ===3)
-{
 
-}
-else
-{
-    console.log(`\x1b[31mSorry, ${choice} is not a valid choice. Try again.\x1b[0m`)
+console.log(`\x1b[36mWelcome to the Elementex!\x1b[0m\n`);
+while (true) {
+    console.log(`\x1b[32m1. View all data`);
+    console.log(`2. Filter by ID (example: CHAR-0003)\x1b[0m`);
+    console.log(`\x1b[31m3. Exit\x1b[0m\n`);
+
+    let choice = readline.questionInt("Please enter your choice: ");
+
+    if (choice === 1)
+    {
+        characters.forEach(character => {
+            console.log(`\x1b[35m- ${character.Names}\x1b[0m \x1b[96m-(${character.ID}\x1b[0m)\n  \x1b[96m- Description:\x1b[0m ${character.Description}\n  \x1b[96m- Age:\x1b[0m ${character.Age}\n  \x1b[96m- Alive:\x1b[0m ${character.isAlive}\n  \x1b[96m- Birthdate:\x1b[0m ${character.Birthday}\n  \x1b[96m- Image:\x1b[0m ${character.imageUrl}\n  \x1b[96m- Abilities:\x1b[0m ${character.abilities.join(", ")}\n  \x1b[96m- Element:\x1b[0m ${character.Elements}\n  \x1b[33m- Weapon:\x1b[0m ${character.Weapons.weapon_name}\n    \x1b[33m- WeaponID:\x1b[0m ${character.Weapons.weapon_id}\n    \x1b[33m- Weapon Power:\x1b[0m ${character.Weapons.weapon_power}\n    \x1b[33m- Origin:\x1b[0m ${character.Weapons.Origin}\n    \x1b[33m- Description:\x1b[0m ${character.Weapons.description}\n    \x1b[31m- Downside:\x1b[0m ${character.Weapons.downside}\n`);
+        });
+        console.log();
+    }
+    else if (choice === 2)
+    {
+        const choiceID = readline.question("Please enter the ID you want to filter by: ");
+        const filteredCharacter = characters.find(character => character.ID.toUpperCase() === choiceID.toUpperCase());
+        console.log();
+
+        if (filteredCharacter)
+        {
+            console.log(`\x1b[35m- ${filteredCharacter.Names}\x1b[0m \x1b[96m-(${filteredCharacter.ID}\x1b[0m)\n  \x1b[96m- Description:\x1b[0m ${filteredCharacter.Description}\n  \x1b[96m- Age:\x1b[0m ${filteredCharacter.Age}\n  \x1b[96m- Alive:\x1b[0m ${filteredCharacter.isAlive}\n  \x1b[96m- Birthdate:\x1b[0m ${filteredCharacter.Birthday}\n  \x1b[96m- Image:\x1b[0m ${filteredCharacter.imageUrl}\n  \x1b[96m- Abilities:\x1b[0m ${filteredCharacter.abilities.join(", ")}\n  \x1b[96m- Element:\x1b[0m ${filteredCharacter.Elements}\n  \x1b[33m- Weapon:\x1b[0m ${filteredCharacter.Weapons.weapon_name}\n    \x1b[33m- WeaponID:\x1b[0m ${filteredCharacter.Weapons.weapon_id}\n    \x1b[33m- Weapon Power:\x1b[0m ${filteredCharacter.Weapons.weapon_power}\n    \x1b[33m- Origin:\x1b[0m ${filteredCharacter.Weapons.Origin}\n    \x1b[33m- Description:\x1b[0m ${filteredCharacter.Weapons.description}\n    \x1b[31m- Downside:\x1b[0m ${filteredCharacter.Weapons.downside}`);
+            console.log()
+        } 
+        else
+        {
+            console.log(`Character with ID ${choiceID} not found.`);
+        }
+    } 
+    else if (choice === 3)
+    {
+        console.log("Exiting...");
+        break;
+    } 
+    else 
+    {
+        console.log(`\x1b[31mSorry, ${choice} is not a valid choice. Try again.\x1b[0m\n`);
+    }
 };
