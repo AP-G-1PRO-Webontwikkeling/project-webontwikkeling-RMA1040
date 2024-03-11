@@ -4,7 +4,7 @@ import { Character, Weapon } from './interfaces';
 async function fetchCharacters(): Promise<Character[]> {
     const response = await fetch('https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/json/characters.json');
     if (!response.ok) {
-        throw new Error('Network response was not ok.');
+        throw new Error('error');
     }
     const characters: Character[] = await response.json();
     return characters;
@@ -14,7 +14,7 @@ async function runApplication() {
     console.log(`\x1b[36mWelcome to the Elementex!\x1b[0m\n`);
     
     try {
-        const characters = await fetchCharacters(); // Correctly awaiting the promise here
+        const characters = await fetchCharacters();
 
         while (true) {
             console.log(`\x1b[32m1. View all data`);
