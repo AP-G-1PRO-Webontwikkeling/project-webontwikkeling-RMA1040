@@ -1,0 +1,32 @@
+<%- include("partials/header") %>
+<h1>Home</h1>
+
+<form action="/" method="get">
+    <label for="search">Search for a name:</label>
+    <input type="text" id="search" name="q" value="<%= q %>">
+
+    <label for="sortField">Sort by:</label>
+    <select name="sortField">
+        <option value="Names">Name</option>
+        <option value="Age">Age</option>
+    </select>
+
+    <label for="sortDirection">Sort direction:</label>
+    <select name="sortDirection">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+
+    <button type="submit">Apply</button>
+</form>
+
+<% if (persons && persons.length > 0) { %>
+    <% persons.forEach(function(character) { %>
+        <p><%= character.Names %> (<%= character.Age %>)</p>
+    <% }); %>
+<% } else { %>
+    <p>No characters found.</p>
+<% } %>
+
+<p>Welcome to my website</p>
+<%- include("partials/footer") %>
