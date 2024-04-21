@@ -6,7 +6,7 @@
     "Age": 39,
     "Birthday": "04-07-1985",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/FIRE.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/FIRE.jpg",
     "abilities": ["manipulate flames", "summon firestorms", "leave trails of fire in his wake."],
     "Elements": "Fire - Represents passion, energy, and transformation.",
     "Weapons":{
@@ -25,7 +25,7 @@
     "Age": 32,
     "Birthday": "22-03-1992",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/WATER.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/WATER.jpg",
     "abilities": ["control water", "summon tidal waves", " heal wounds"],
     "Elements": "Water - Symbolizes fluidity, emotion, and healing.",
     "Weapons":{
@@ -45,7 +45,7 @@
     "Age": 49,
     "Birthday": "15-10-1975",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/EARTH.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/EARTH.jpg",
     "abilities": ["manipulate the ground", "create protective barriers of stone","cause earthquakes to deter foes"],
     "Elements": "Embodies stability, strength, and growth.",
     "Weapons":{
@@ -65,7 +65,7 @@
     "Age": 36,
     "Birthday": "01-04-1988",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/WIND.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/WIND.jpg",
     "abilities": ["command the air to create powerful gusts","form tornadoes","fly by riding air currents"],
     "Elements": "Air - Signifies freedom, intelligence, and communication.",
     "Weapons":{
@@ -85,7 +85,7 @@
     "Age": 31,
     "Birthday": "21-06-1993",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/LIGHT.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/LIGHT.jpg",
     "abilities": ["illuminate","blind enemies with flashes","heal"],
     "Elements": "Light - Conveys purity, truth, and enlightenment.",
     "Weapons":{
@@ -105,7 +105,7 @@
     "Age": 42,
     "Birthday": "31-10-1982",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/DARK.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/DARK.jpg",
     "abilities": ["blend into darkness","manipulate dark energy to confound and weaken enemies","travel through shadows to appear anywhere unannounced"],
     "Elements": "Darkness - Represents mystery, power, and the unknown.",
     "Weapons":{
@@ -125,7 +125,7 @@
     "Age": 34,
     "Birthday": "11-12-1990",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/ICE.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/ICE.jpg",
     "abilities": ["freeze anything with a touch","summon blizzards","create ice constructs for offense and defense"],
     "Elements": "Ice - Symbolizes clarity, resilience, and stasis.",
     "Weapons":{
@@ -145,7 +145,7 @@
     "Age": 29,
     "Birthday": "17-05-1995",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/LIGHTNING.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/LIGHTNING.jpg",
     "abilities": ["generate electric shocks","move at lightning speed","call down thunderstorms"],
     "Elements": "Lightning - Denotes speed, unpredictability, and electrical power.",
     "Weapons":{
@@ -165,7 +165,7 @@
     "Age": 44,
     "Birthday": "29-08-1980",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/METAL.jpg",
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/METAL.jpg",
     "abilities":["hape metal at will","craft weapons and armor mid-battle","near-impenetrable metallic skin"],
     "Elements": "Metal - Embodies durability, craftsmanship, and precision.",
     "Weapons":{
@@ -181,20 +181,20 @@
   {
     "ID": "CHAR-0010",
     "Names": "Flora Greenwhisper",
-    "Description": "A gentle soul with a deep connection to nature. ",
+    "Description": "A gentle soul with a deep connection to nature.",
     "Age": 28,
     "Birthday": "30-04-1996",
     "isAlive": true,
-    "imageUrl": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/blob/main/assets/images/NATURE.jpg",
-    "abilities": ["communicate with plants","create plant barriers and weapons","summon woodland creatures to aid her"],
+    "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/NATURE.jpg",
+    "abilities": ["communicate with plants", "create plant barriers and weapons", "summon woodland creatures to aid her"],
     "Elements": "Nature - Represents life, interconnectedness, and renewal.",
-    "Weapons":{
+    "Weapons": {
       "weapon_name": "Blossom Barrier",
-        "weapon_id": "RWPN-0031",
-        "weapon_power": 700,
-        "Origin": "Verdant Vale",
-        "description": "A magical shield that can expand to protect large areas or contract for focused defense. Additionally, this unique artifact has the ability to absorb various elemental energies, turning potential threats into nourishment for its wielder. Can only be used by Nature element.",
-        "downside": "While in full use retracting shield takes 4 seconds where user is vulnerable."
+      "weapon_id": "RWPN-0031",
+      "weapon_power": 700,
+      "Origin": "Verdant Vale",
+      "description": "A magical shield that can expand to protect large areas or contract for focused defense. Additionally, this unique artifact has the ability to absorb various elemental energies, turning potential threats into nourishment for its wielder. Can only be used by Nature element.",
+      "downside": "While in full use retracting shield takes 4 seconds where user is vulnerable."
     }
-  }
+  }  
 ]

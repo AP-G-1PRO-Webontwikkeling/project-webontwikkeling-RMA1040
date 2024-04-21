@@ -22,7 +22,11 @@
 
 <% if (persons && persons.length > 0) { %>
     <% persons.forEach(function(character) { %>
-        <p><%= character.Names %> (<%= character.Age %>)</p>
+        <div>
+            <img src="<%= character.imageUrl %>" alt="Photo of <%= character.Names %>" style="width:100px; height:auto;">
+            <p><%= character.Names %> - <%= character.Age %></p>
+            <p><%= character.Description %></p>
+        </div>
     <% }); %>
 <% } else { %>
     <p>No characters found.</p>
