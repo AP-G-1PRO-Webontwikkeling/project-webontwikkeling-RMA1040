@@ -1,0 +1,22 @@
+<%- include("partials/header") %>
+    <h1><%= character.Names %></h1>
+    <section>
+        <article>
+            <img src="<%= character.imageUrl %>" alt="Image of <%= character.Names %>" style="width:200px;">
+            <p><strong>ID:</strong> <%= character.ID %></p>
+            <p><strong>Age:</strong> <%= character.Age %></p>
+            <p><strong>Birthday:</strong> <%= character.Birthday %></p>
+            <p><strong>Alive:</strong> <%= character.isAlive ? 'Yes' : 'No' %></p>
+            <p><strong>Description:</strong> <%= character.Description %></p>
+            <p><strong>Abilities:</strong> <%= character.abilities.join(', ') %></p>
+            <p><strong>Element:</strong> <%= character.Elements %></p>
+            <h3>Weapon Details</h3>
+            <p><strong>Name:</strong> <%= character.Weapons.weapon_name %></p>
+            <p><strong>ID:</strong> <%= character.Weapons.weapon_id %></p>
+            <p><strong>Power:</strong> <%= character.Weapons.weapon_power %></p>
+            <p><strong>Origin:</strong> <%= character.Weapons.Origin %></p>
+            <p><strong>Description:</strong> <%= character.Weapons.description %></p>
+            <p><strong>Downside:</strong> <%= character.Weapons.downside %></p>
+        </article>
+    </section>
+    <%- include("partials/footer") %>

@@ -35,6 +35,41 @@ app.get("/", (req, res) => {
     });
 });
 
+
+//character pagina 
+app.get("/characters", (req, res) => {
+    res.render("characters", { characters: characters });
+});
+
+//character vinden via ID
+app.get("/characters/:id", (req, res) => {
+    const character = characters.find(c => c.ID === req.params.id);
+    if (character) {
+        res.render("character-detail", { character: character });
+    } else {
+        res.send("Character not found");
+    }
+});
+
+// weapons pagina
+// Extracting weapons from each character
+const weapons: Weapon[] = characters.map(character => character.Weapons);
+
+app.get('/weapons', (req, res) => {
+    res.render('weapons', { weapons: weapons });
+});
+
+app.get("/weapon-details/:weaponId", (req, res) => {
+    const weaponId = req.params.weaponId;
+    const weapon = weapons.find(w => w.weapon_id === weaponId);  // Ensure you have an array `weapons` available
+
+    if (weapon) {
+        res.render("weapon-detail", { weapon: weapon });
+    } else {
+        res.status(404).send("Weapon not found");
+    }
+});
+
 app.use((req, res, next) => {
     res.status(404).send("404 - server not found");
 });

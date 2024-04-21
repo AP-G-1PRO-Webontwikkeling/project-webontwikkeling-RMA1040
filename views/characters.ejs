@@ -1,0 +1,13 @@
+<%- include("partials/header") %>
+    <h1>Characters</h1>
+    <section>
+    <% characters.forEach(character => { %>
+        <article>
+            <a href="/characters/<%= character.ID %>">
+                <img src="<%= character.imageUrl %>" alt="Image of <%= character.Names %>" style="width:100px; height:auto;">
+                <h2><%= character.Names %></h2>
+            </a>
+        </article>
+    </section>
+    <% }); %>
+    <%- include("partials/footer") %>

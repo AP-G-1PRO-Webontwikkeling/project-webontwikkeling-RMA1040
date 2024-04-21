@@ -1,0 +1,9 @@
+<%- include("partials/header") %>
+    <h1><%= weapon.weapon_name %> Details</h1>
+    <img src="<%= weapon.imageUrl %>" alt="<%= weapon.weapon_name %>" style="width:200px;">
+    <p><strong>ID:</strong> <%= weapon.weapon_id %></p>
+    <p><strong>Power:</strong> <%= weapon.weapon_power %></p>
+    <p><strong>Origin:</strong> <%= weapon.Origin %></p>
+    <p><strong>Description:</strong> <%= weapon.description %></p>
+    <p><strong>Downside:</strong> <%= weapon.downside %></p>
+    <%- include("partials/footer") %>
