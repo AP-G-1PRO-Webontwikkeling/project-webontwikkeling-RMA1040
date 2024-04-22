@@ -52,26 +52,27 @@ app.get("/characters/:id", (req, res) => {
 });
 
 // weapons pagina
-// Extracting weapons from each character
+// elke weapons van elk character uit Array halen
 const weapons: Weapon[] = characters.map(character => character.Weapons);
 
 app.get('/weapons', (req, res) => {
     res.render('weapons', { weapons: weapons });
 });
 
-app.get("/weapon-details/:weaponId", (req, res) => {
-    const weaponId = req.params.weaponId;
-    const weapon = weapons.find(w => w.weapon_id === weaponId);  // Ensure you have an array `weapons` available
+app.get("/weapons-detail/:weapon_id", (req, res) => {
+    const weaponId = req.params.weapon_id;
+    const weapon = weapons.find(w => w.weapon_id === weaponId);
 
     if (weapon) {
-        res.render("weapon-detail", { weapon: weapon });
+        res.render("weapons-detail", { weapon: weapon });
     } else {
         res.status(404).send("Weapon not found");
     }
 });
 
+
 app.use((req, res, next) => {
-    res.status(404).send("404 - server not found");
+    res.status(404).send("404 - this page doesn't exist");
 });
 
 app.listen(app.get("port"), () => console.log(`[server] http://localhost:${app.get("port")}`));

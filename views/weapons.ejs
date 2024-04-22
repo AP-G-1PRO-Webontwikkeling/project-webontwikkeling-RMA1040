@@ -1,13 +1,14 @@
-<%- include("partials/header") %>
-<h1>Weapons List</h1>
 <% if (weapons.length > 0) { %>
     <% weapons.forEach(weapon => { %>
         <article>
-            <h2><%= weapon.weapon_name %></h2>
-            <p>ID: <%= weapon.weapon_id %></p>
+            <a href="/weapons-detail/<%= weapon.weapon_id %>">
+                <h2><%= weapon.weapon_name %></h2>
+            </a>
+                <p>ID: <%= weapon.weapon_id %></p>
         </article>
     <% }); %>
 <% } else { %>
     <p>No weapons found.</p>
 <% } %>
-<%- include("partials/footer") %>
+
+
