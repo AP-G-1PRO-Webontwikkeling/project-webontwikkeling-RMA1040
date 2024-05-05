@@ -2,12 +2,32 @@ import express from "express";
 import ejs from "ejs";
 import { Character, Weapon } from './interfaces';
 import characters from './json/characters.json';
+import {client, connectMongo} from './mongo/mongo'
+import { Console } from "console";
 
 const app = express();
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("port", 3000);
+app.use(express.json());
+
+// POST route om nieuwe characters toe te voegen
+app.post("/characters", async (req, res) => {
+    const newCharacter = req.body;
+
+    try{
+        const collection = client.db("Elementex").collection("characters"); // neemt json objecten en veranderd deze in JS objecten in DB
+        const result = await collection.insertOne(newCharacter); // JS object toevboegen aan "Elementex"
+        console.log(`Character added with ID ${result.insertedId}`);
+    }
+    catch (e){
+        console.error(e);
+    }
+    finally{
+        await client.close();
+    }
+});
 
 
 app.get("/", (req, res) => {
