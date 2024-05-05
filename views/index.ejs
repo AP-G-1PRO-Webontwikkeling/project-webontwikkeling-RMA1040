@@ -23,8 +23,9 @@
 <% if (persons && persons.length > 0) { %>
     <% persons.forEach(function(character) { %>
         <div>
+            <a href="/characters/<%= character.ID %>">
             <img src="<%= character.imageUrl %>" alt="Photo of <%= character.Names %>" style="width:100px; height:auto;">
-            <p><%= character.Names %> - <%= character.Age %></p>
+            <p><%= character.Names %> </a> - <%= character.Age %></p>
             <p><%= character.Description %></p>
         </div>
     <% }); %>
