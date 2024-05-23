@@ -178,7 +178,7 @@
     "Elements": "Metal - Embodies durability, craftsmanship, and precision.",
     "Weapons":{
       "weapon_name": "Aeronaut's Exosuit",
-      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/assets/images/Aeronaut's_Exosuit.png",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Aeronaut's_Exosuit.png",
       "weapon_id": "RWPN-0030",
       "weapon_power": 524,
       "Origin": "Iron Summit",

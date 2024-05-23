@@ -6,6 +6,7 @@ import {client, connectMongo} from './mongo/mongo'
 import { Console } from "console";
 
 const app = express();
+const path = require('path');
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -29,7 +30,7 @@ app.post("/characters", async (req, res) => {
     }
 });
 
-
+//filteren INDEX  pagina
 app.get("/", (req, res) => {
     // filteren van characters in zoekbalk
     const q: string = typeof req.query.q === 'string' ? req.query.q : "";
@@ -56,9 +57,32 @@ app.get("/", (req, res) => {
 });
 
 
-//character pagina 
+//--------------------------------------------------------character pagina 
 app.get("/characters", (req, res) => {
-    res.render("characters", { characters: characters });
+    // filteren van characters in zoekbalk
+    const q: string = typeof req.query.q === 'string' ? req.query.q : "";
+    let filteredCharacters: Character[] = characters.filter(character => 
+        character.Names.toLowerCase().includes(q.toLowerCase())
+    );
+
+    //sorteren
+    const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
+    const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
+    let sortedCharacters = filteredCharacters.sort((a, b) => {
+        if (sortField === "Names") {
+            return sortDirection === "asc" ? a.Names.localeCompare(b.Names) : b.Names.localeCompare(a.Names);
+        } else if (sortField === "Age") {
+            return sortDirection === "asc" ? a.Age - b.Age : b.Age - a.Age;
+        }
+        return 0;
+    });
+
+    res.render("characters", {
+        characters: sortedCharacters,
+        sortField,
+        sortDirection,
+        q
+    });
 });
 
 //character vinden via ID
@@ -71,13 +95,18 @@ app.get("/characters/:id", (req, res) => {
     }
 });
 
-// weapons pagina
+// ----------------------------------------------------------------weapons pagina
 // elke weapons van elk character uit Array halen
 const weapons: Weapon[] = characters.map(character => character.Weapons);
 
 app.get('/weapons', (req, res) => {
-    res.render('weapons', { weapons: weapons });
+    const q: string = typeof req.query.q === 'string' ? req.query.q : "";
+    res.render('weapons', { 
+        weapons: weapons,
+        q: q
+    });
 });
+
 
 app.get("/weapons-detail/:weapon_id", (req, res) => {
     const weaponId = req.params.weapon_id;
@@ -93,5 +122,9 @@ app.get("/weapons-detail/:weapon_id", (req, res) => {
 app.use((req, res, next) => {
     res.status(404).send("404 - this page doesn't exist");
 });
+
+// CSS STYLE
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.listen(app.get("port"), () => console.log(`[server] http://localhost:${app.get("port")}`));
