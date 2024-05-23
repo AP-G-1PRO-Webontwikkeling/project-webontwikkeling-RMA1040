@@ -3,15 +3,14 @@
     <section>
         <article>
             <img src="<%= character.imageUrl %>" alt="Image of <%= character.Names %>" style="width:300px;">
-            <p><strong>ID:</strong> <%= character.ID %></p>
-            <p><strong>Age:</strong> <%= character.Age %></p>
-            <p><strong>Birthday:</strong> <%= character.Birthday %></p>
-            <p><strong>Alive:</strong> <%= character.isAlive ? 'Yes' : 'No' %></p>
-            <p><strong>Description:</strong> <%= character.Description %></p>
-            <p><strong>Abilities:</strong> <%= character.abilities.join(', ') %></p>
-            <p><strong>Element:</strong> <%= character.Elements %></p>
-            <h3>Weapon</h3>
-            <p> <a href="/weapons-detail/<%= character.Weapons.weapon_id %>"><%= character.Weapons.weapon_name %></a></p>
+            <p><strong>ID</strong><br><%= character.ID %></p>
+            <p><strong>Age</strong><br><%= character.Age %></p>
+            <p><strong>Birthday</strong><br><%= character.Birthday %></p>
+            <p><strong>Alive</strong><br><%= character.isAlive ? 'Yes' : 'No' %></p>
+            <p><strong>Description</strong><br><%= character.Description %></p>
+            <p><strong>Abilities</strong><br><%= character.abilities.join(', ') %></p>
+            <p><strong>Element</strong><br><%= character.Elements %></p>
+            <p><strong>Weapon</strong><br><a href="/weapons-detail/<%= character.Weapons.weapon_id %>"><%= character.Weapons.weapon_name %></a></p>
         </article>
     </section>
     <%- include("partials/footer") %>
