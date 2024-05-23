@@ -11,7 +11,7 @@
     "Elements": "Fire - Represents passion, energy, and transformation.",
     "Weapons":{
       "weapon_name": "Eternal Flame Lantern",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Eternal_Flame_Lantern.png",
       "weapon_id": "RWPN-0021",
       "weapon_power": 805,
       "Origin": "Inferno Depths",
@@ -31,7 +31,7 @@
     "Elements": "Water - Symbolizes fluidity, emotion, and healing.",
     "Weapons":{
       "weapon_name": "Aqua Regis Crown",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Aqua_Regis_Crown.png",
       "weapon_id": "RWPN-0022",
       "weapon_power": 45,
       "Origin": "Oceanic Nexus",
@@ -52,7 +52,7 @@
     "Elements": "Embodies stability, strength, and growth.",
     "Weapons":{
       "weapon_name": "Gauntlets of Earthen Might",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Gauntlets_of_Earthen_Might.png",
       "weapon_id": "RWPN-0023",
       "weapon_power": 504,
       "Origin": "Mountain Core",
@@ -73,7 +73,7 @@
     "Elements": "Air - Signifies freedom, intelligence, and communication.",
     "Weapons":{
       "weapon_name": "Graviton Step",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Graviton_Step.png",
       "weapon_id": "RWPN-0025",
       "weapon_power": 110,
       "Origin": "Celestial Vault",
@@ -94,7 +94,7 @@
     "Elements": "Light - Conveys purity, truth, and enlightenment.",
     "Weapons":{
       "weapon_name": "Veil of Light",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Veil_of_Light.png",
       "weapon_id": "RWPN-0026",
       "weapon_power": 836,
       "Origin": "Sunspire Sanctum",
@@ -115,7 +115,7 @@
     "Elements": "Darkness - Represents mystery, power, and the unknown.",
     "Weapons":{
       "weapon_name": "Shadowstrike Dagger",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Shadowstrike_Dagger.png",
       "weapon_id": "RWPN-0027",
       "weapon_power": 282,
       "Origin": "Dusk Hollow",
@@ -136,7 +136,7 @@
     "Elements": "Ice - Symbolizes clarity, resilience, and stasis.",
     "Weapons":{
       "weapon_name": "Heartfire Amulet",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Heartfire_Amulet.png",
       "weapon_id": "RWPN-0028",
       "weapon_power": 155,
       "Origin": "Glacier Peak",
@@ -157,7 +157,7 @@
     "Elements": "Lightning - Denotes speed, unpredictability, and electrical power.",
     "Weapons":{
       "weapon_name": "Thunderbolt Arsenal",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Thunderbolt_Arsenal.png",
       "weapon_id": "RWPN-0029",
       "weapon_power": 500,
       "Origin": "Stormheart Forge",
@@ -178,7 +178,7 @@
     "Elements": "Metal - Embodies durability, craftsmanship, and precision.",
     "Weapons":{
       "weapon_name": "Aeronaut's Exosuit",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/assets/images/Aeronaut's_Exosuit.png",
       "weapon_id": "RWPN-0030",
       "weapon_power": 524,
       "Origin": "Iron Summit",
@@ -199,7 +199,7 @@
     "Elements": "Nature - Represents life, interconnectedness, and renewal.",
     "Weapons": {
       "weapon_name": "Blossom Barrier",
-      "imageUrl":"",
+      "imageUrl":"https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/Blossom_Barrier.png",
       "weapon_id": "RWPN-0031",
       "weapon_power": 700,
       "Origin": "Verdant Vale",
