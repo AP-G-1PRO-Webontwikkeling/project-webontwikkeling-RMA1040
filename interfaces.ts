@@ -13,6 +13,7 @@ export interface Character {
   
   export interface Weapon {
     weapon_name: string;
+    imageUrl: string;
     weapon_id: string;
     weapon_power: number;
     Origin: string;
