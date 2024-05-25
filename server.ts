@@ -1,34 +1,20 @@
-import express from "express";
+import express, {Express, Request, Response,NextFunction} from "express";
 import ejs from "ejs";
 import { Character, Weapon } from './interfaces';
 import characters from './json/characters.json';
-import {client, connectMongo} from './mongo/mongo'
-import { Console } from "console";
+import { connect, getUsers,createUser,deleteUser, getUserById, updateUser } from "./database";
+import { User } from "./types";
+import path from "path";
+import dotenv from "dotenv";
 
-const app = express();
-const path = require('path');
+dotenv.config();
+const app: Express = express();
 
-app.use(express.static("public"));
 app.set("view engine", "ejs");
-app.set("port", 3000);
 app.use(express.json());
-
-// POST route om nieuwe characters toe te voegen
-app.post("/characters", async (req, res) => {
-    const newCharacter = req.body;
-
-    try{
-        const collection = client.db("Elementex").collection("characters"); // neemt json objecten en veranderd deze in JS objecten in DB
-        const result = await collection.insertOne(newCharacter); // JS object toevboegen aan "Elementex"
-        console.log(`Character added with ID ${result.insertedId}`);
-    }
-    catch (e){
-        console.error(e);
-    }
-    finally{
-        await client.close();
-    }
-});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.set('views', path.join(__dirname, "views"));
 
 //filteren INDEX  pagina
 app.get("/", (req, res) => {
@@ -126,5 +112,48 @@ app.use((req, res, next) => {
 // CSS STYLE
 app.use(express.static(path.join(__dirname, 'public')));
 
+// DATABASE
+app.listen(3000, async () => {
+    await connect();
+    console.log("Server is running on port 3000");
+});
+
+app.get("/users", async(req, res) => {
+    let users : User[] = await getUsers();
+    res.render("users/index", {
+        users: users
+    });
+});
+
+app.get("/users/create", async(req, res) => {
+    res.render("users/create");
+});
+
+app.post("/users/create", async(req, res) => {
+    let user : User = req.body;
+    await createUser(user);
+    res.redirect("/users");
+});
+
+app.post("/users/:id/delete", async(req, res) => {
+    let id : number = parseInt(req.params.id);
+    await deleteUser(id);
+    res.redirect("/users");
+});
+
+app.get("/users/:id/update", async(req, res) => {
+    let id : number = parseInt(req.params.id);
+    let user : User | null = await getUserById(id);
+    res.render("users/update", {
+        user: user
+    });
+});
+
+app.post("/users/:id/update", async(req, res) => {
+    let id : number = parseInt(req.params.id);
+    let user : User = req.body;
+    await updateUser(id, user);
+    res.redirect("/users");
+});
 
 app.listen(app.get("port"), () => console.log(`[server] http://localhost:${app.get("port")}`));

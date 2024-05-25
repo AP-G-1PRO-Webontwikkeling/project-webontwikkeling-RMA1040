@@ -1,0 +1,64 @@
+<%- include("../partials/header") %>
+<section>
+    <header>
+        <h1>Update User</h1>
+    </header>
+    <form action="/users/<%= user.id %>/update" method="POST"> <!-- Changed the action URL to `/users/update` -->
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= user.name %>" required>
+        </div>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="<%= user.username %>" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<%= user.email %>" required>
+        </div>
+        <fieldset>
+            <legend>Address</legend>
+            <div>
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="address[street]" value="<%= user.address.street %>" required>
+            </div>
+            <div>
+                <label for="suite">Suite:</label>
+                <input type="text" id="suite" name="address[suite]" value="<%= user.address.suite %>">
+            </div>
+            <div>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="address[city]" value="<%= user.address.city %>" required>
+            </div>
+            <div>
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" id="zipcode" name="address[zipcode]" value="<%= user.address.zipcode %>" required>
+            </div>
+        </fieldset>
+        <div>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="<%= user.phone %>" required>
+        </div>
+        <div>
+            <label for="website">Website:</label>
+            <input type="text" id="website" name="website" value="<%= user.website %>">
+        </div>
+        <fieldset>
+            <legend>Company</legend>
+            <div>
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" name="company[name]" value="<%= user.company.name %>" required>
+            </div>
+            <div>
+                <label for="catchPhrase">Catch Phrase:</label>
+                <input type="text" id="catchPhrase" name="company[catchPhrase]" value="<%= user.company.catchPhrase %>">
+            </div>
+            <div>
+                <label for="bs">BS:</label>
+                <input type="text" id="bs" name="company[bs]" value="<%= user.company.bs %>">
+            </div>
+        </fieldset>
+        <button type="submit">Update User</button> <!-- Changed the button text to `Update User` -->
+    </form>
+</section>
+<%- include("../partials/footer") %>

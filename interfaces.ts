@@ -1,3 +1,5 @@
+import internal from "stream";
+
 export interface Character {
     ID: string;
     Names: string;

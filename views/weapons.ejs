@@ -7,8 +7,8 @@
 
         <label for="sortField">Sort by:</label>
         <select name="sortField">
-            <option value="Names">Name</option>
-            <option value="character.weapon_power">Power</option>
+            <option value="weapon name">Name</option>
+            <option value="weapon power">Power</option>
         </select>
 
         <label for="sortDirection">Sort direction:</label>
@@ -22,7 +22,7 @@
 </section>
 <% if (weapons.length > 0) { %>
     <% weapons.forEach(weapon => { %>
-        <section>
+        <section class="display">
             <article>
                 <a href="/weapons-detail/<%= weapon.weapon_id %>">
                     <h2><%= weapon.weapon_name %></h2>
