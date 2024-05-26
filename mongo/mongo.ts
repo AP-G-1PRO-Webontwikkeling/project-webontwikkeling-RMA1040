@@ -1,7 +1,13 @@
-import {MongoClient} from "mongodb";
+import {MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = "mongodb+srv://<username>:<password>@<your-cluster-url>/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+const uri = "mongodb+srv://raymondmcoding:Jonny1040@cluster0.im6apum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
 
 async function connectMongo(){
     try{
