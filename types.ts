@@ -1,32 +1,13 @@
 import { ObjectId } from "mongodb";
 
 export interface User {
-    _id: ObjectId;
-    id: number;
-    name: string;
-    username: string;
+    _id?: ObjectId;
     email: string;
-    address: Address;
-    phone: string;
-    website: string;
-    company: Company;
+    password?: string;
+    role: "ADMIN" | "USER";
+    message?: string;
 }
-
-export interface Address {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: Geo;
-}
-
-export interface Geo {
-    lat: string;
-    lng: string;
-}
-
-export interface Company {
-    name: string;
-    catchPhrase: string;
-    bs: string;
+export interface FlashMessage {
+    type: "error" | "success"
+    message: string;
 }

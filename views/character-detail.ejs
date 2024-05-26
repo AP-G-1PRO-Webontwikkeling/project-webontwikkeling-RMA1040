@@ -8,7 +8,7 @@
             <p><strong>Birthday</strong><br><%= character.Birthday %></p>
             <p><strong>Alive</strong><br><%= character.isAlive ? 'Yes' : 'No' %></p>
             <p><strong>Description</strong><br><%= character.Description %></p>
-            <p><strong>Abilities</strong><br><%= character.abilities.join(', ') %></p>
+            <p><strong>Abilities</strong><br><%= Array.isArray(character.abilities) ? character.abilities.join(', ') : '' %></p>
             <p><strong>Element</strong><br><%= character.Elements %></p>
             <p><strong>Weapon</strong><br><a href="/weapons-detail/<%= character.Weapons.weapon_id %>"><%= character.Weapons.weapon_name %></a></p>
             <a href="/characters/<%= character.ID %>/update" style="display:inline;">

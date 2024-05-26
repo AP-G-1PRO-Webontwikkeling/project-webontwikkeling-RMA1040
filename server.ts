@@ -1,12 +1,17 @@
 import express from "express";
 import ejs from "ejs";
-import path, { format } from "path";
-import { Character, Weapon } from './interfaces';
-import characters from './json/characters.json';
-import { client, connectMongo } from './mongo/mongo';
-import { connect, getUsers, createUser, deleteUser, getUserById, updateUser } from "./database";
-import { User } from "./types";
+import path from "path";
+import { Character } from './interfaces';
+import { connect, getCharacters,updateCharacter, deleteCharacter,login } from './mongo';
 import dotenv from "dotenv";
+import { User } from "./types"
+import session from "./session";
+import { secureMiddleware } from "./secureMiddleware";
+import { loginRouter } from "./routes/loginRouter";
+import { homeRouter } from "./routes/homeRouter";
+import { flashMiddleware } from "./flashMiddleware";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,158 +31,226 @@ app.listen(PORT, async () => {
 });
 
 //---------------------------------------------------------------------------------------------------- CHARACTERS ROUTES
-app.post("/characters", async (req, res) => {
-    const newCharacter = req.body;
-
+app.get("/", async (req, res) => {
     try {
-        const collection = client.db("Elementex").collection("characters");
-        const result = await collection.insertOne(newCharacter);
-        console.log(`Character added with ID ${result.insertedId}`);
-        res.status(201).send(`Character added with ID ${result.insertedId}`);
-    } catch (e) {
-        console.error(e);
-        res.status(500).send("Error adding character");
+        const q: string = typeof req.query.q === 'string' ? req.query.q : "";
+        const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
+        const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
+
+        const characters = await getCharacters();
+        console.log("Fetched characters for route:", characters);
+        let filteredCharacters: Character[] = characters.filter(character =>
+            character.Names.toLowerCase().includes(q.toLowerCase())
+        );
+
+        let sortedCharacters = filteredCharacters.sort((a, b) => {
+            if (sortField === "Names") {
+                return sortDirection === "asc" ? a.Names.localeCompare(b.Names) : b.Names.localeCompare(a.Names);
+            } else if (sortField === "Age") {
+                return sortDirection === "asc" ? a.Age - b.Age : b.Age - a.Age;
+            }
+            return 0;
+        });
+
+        console.log("Filtered and sorted characters:", sortedCharacters);
+
+        res.render("index", {
+            persons: sortedCharacters,
+            sortField,
+            sortDirection,
+            q
+        });
+    } catch (error) {
+        console.error("Error fetching characters:", error);
+        res.status(500).send("Error fetching characters");
     }
 });
 
-app.get("/", (req, res) => {
-    const q: string = typeof req.query.q === 'string' ? req.query.q : "";
-    let filteredCharacters: Character[] = characters.filter(character =>
-        character.Names.toLowerCase().includes(q.toLowerCase())
-    );
+app.get("/characters", async (req, res) => {
+    try {
+        const q: string = typeof req.query.q === 'string' ? req.query.q : "";
+        const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
+        const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
 
-    const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
-    const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
-    let sortedCharacters = filteredCharacters.sort((a, b) => {
-        if (sortField === "Names") {
-            return sortDirection === "asc" ? a.Names.localeCompare(b.Names) : b.Names.localeCompare(a.Names);
-        } else if (sortField === "Age") {
-            return sortDirection === "asc" ? a.Age - b.Age : b.Age - a.Age;
-        }
-        return 0;
-    });
+        const characters = await getCharacters();
+        console.log("Fetched characters for route:", characters);
+        let filteredCharacters: Character[] = characters.filter(character =>
+            character.Names.toLowerCase().includes(q.toLowerCase())
+        );
 
-    res.render("index", {
-        persons: sortedCharacters,
-        sortField,
-        sortDirection,
-        q
-    });
+        let sortedCharacters = filteredCharacters.sort((a, b) => {
+            if (sortField === "Names") {
+                return sortDirection === "asc" ? a.Names.localeCompare(b.Names) : b.Names.localeCompare(a.Names);
+            } else if (sortField === "Age") {
+                return sortDirection === "asc" ? a.Age - b.Age : b.Age - a.Age;
+            }
+            return 0;
+        });
+
+        console.log("Filtered and sorted characters:", sortedCharacters);
+
+        res.render("characters", {
+            characters: sortedCharacters,
+            sortField,
+            sortDirection,
+            q
+        });
+    } catch (error) {
+        console.error("Error fetching characters:", error);
+        res.status(500).send("Error fetching characters");
+    }
 });
 
-app.get("/characters", (req, res) => {
-    const q: string = typeof req.query.q === 'string' ? req.query.q : "";
-    let filteredCharacters: Character[] = characters.filter(character =>
-        character.Names.toLowerCase().includes(q.toLowerCase())
-    );
-
-    const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
-    const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
-    let sortedCharacters = filteredCharacters.sort((a, b) => {
-        if (sortField === "Names") {
-            return sortDirection === "asc" ? a.Names.localeCompare(b.Names) : b.Names.localeCompare(a.Names);
-        } else if (sortField === "Age") {
-            return sortDirection === "asc" ? a.Age - b.Age : b.Age - a.Age;
+app.get("/characters/:id", async (req, res) => {
+    try {
+        const characters = await getCharacters();
+        const character = characters.find(c => c.ID === req.params.id);
+        if (character) {
+            res.render("character-detail", { character: character });
+        } else {
+            res.status(404).send("Character not found");
         }
-        return 0;
-    });
-
-    res.render("characters", {
-        characters: sortedCharacters,
-        sortField,
-        sortDirection,
-        q
-    });
-});
-
-app.get("/characters/:id", (req, res) => {
-    const character = characters.find(c => c.ID === req.params.id);
-    if (character) {
-        res.render("character-detail", { character: character });
-    } else {
-        res.status(404).send("Character not found");
+    } catch (error) {
+        console.error("Error fetching character:", error);
+        res.status(500).send("Error fetching character");
     }
 });
 
 //---------------------------------------------------------------------------------------------------- WEAPONS ROUTES
-const weapons: Weapon[] = characters.flatMap(character => character.Weapons);
+app.get('/weapons', async (req, res) => {
+    try {
+        const characters = await getCharacters();
+        const weapons = characters.flatMap(character => character.Weapons);
 
-app.get('/weapons', (req, res) => {
-    const q: string = typeof req.query.q === 'string' ? req.query.q : "";
-    res.render('weapons', {
-        weapons: weapons,
-        q: q
-    });
-});
+        const q: string = typeof req.query.q === 'string' ? req.query.q : "";
+        const filteredWeapons = weapons.filter(weapon =>
+            weapon.weapon_name.toLowerCase().includes(q.toLowerCase())
+        );
 
-app.get("/weapons-detail/:weapon_id", (req, res) => {
-    const weaponId = req.params.weapon_id;
-    const weapon = weapons.find(w => w.weapon_id === weaponId);
+        const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "weapon_name";
+        const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
 
-    if (weapon) {
-        res.render("weapons-detail", { weapon: weapon });
-    } else {
-        res.status(404).send("Weapon not found");
+        const sortedWeapons = filteredWeapons.sort((a, b) => {
+            if (sortField === "weapon_name") {
+                return sortDirection === "asc" ? a.weapon_name.localeCompare(b.weapon_name) : b.weapon_name.localeCompare(a.weapon_name);
+            } else if (sortField === "weapon_power") {
+                return sortDirection === "asc" ? a.weapon_power - b.weapon_power : b.weapon_power - a.weapon_power;
+            }
+            return 0;
+        });
+
+        res.render("weapons", {
+            weapons: sortedWeapons,
+            sortField: sortField,
+            sortDirection: sortDirection,
+            q: q
+        });        
+    } catch (error) {
+        console.error("Error fetching weapons:", error);
+        res.status(500).send("Error fetching weapons");
     }
 });
 
-//---------------------------------------------------------------------------------------------------- USERS ROUTES
+app.get("/weapons-detail/:weapon_id", async (req, res) => {
+    try {
+        const characters = await getCharacters();
+        const weapons = characters.flatMap(character => character.Weapons);
+        const weapon = weapons.find(w => w.weapon_id === req.params.weapon_id);
+
+        if (weapon) {
+            res.render("weapons-detail", { weapon: weapon });
+        } else {
+            res.status(404).send("Weapon not found");
+        }
+    } catch (error) {
+        console.error("Error fetching weapon:", error);
+        res.status(500).send("Error fetching weapon");
+    }
+});
+
+//---------------------------------------------------------------------------------------------------- CRUD CHARACTERS ROUTES
 app.post("/characters/:id/delete", async (req, res) => {
     const characterId = req.params.id;
     try {
-        const index = characters.findIndex(c => c.ID === characterId);
-        if (index !== -1) {
-            characters.splice(index, 1);
-            res.redirect("/characters");
-        } else {
-            res.status(404).send("Character not found");
-        }
+        await deleteCharacter(characterId);
+        res.redirect("/characters");
     } catch (error) {
         console.error("Error deleting character:", error);
         res.status(500).send("Error deleting character");
     }
 });
 
-app.get("/characters/:id/update", (req, res) => {
-    const characterId = req.params.id;
-    const character = characters.find(c => c.ID === characterId);
-    if (character) {
-        res.render("update", { character: character });
-    } else {
-        res.status(404).send("Character not found");
+app.get("/characters/:id/update", async (req, res) => {
+    try {
+        const characters = await getCharacters();
+        const character = characters.find(c => c.ID === req.params.id);
+        if (character) {
+            res.render("update", { character: character });
+        } else {
+            res.status(404).send("Character not found");
+        }
+    } catch (error) {
+        console.error("Error fetching character:", error);
+        res.status(500).send("Error fetching character");
     }
 });
 
 app.post("/characters/:id/update", async (req, res) => {
     const characterId = req.params.id;
-    const updatedCharacterData = req.body;
-
+    const updatedCharacter = req.body;
     try {
-        const collection = client.db("Elementex").collection("characters");
-        const character = await collection.findOne({ ID: characterId });
-
-        if (!character) {
-            return res.status(404).send("Character not found");
-        }
-
-        // Update the character fields with the data from the form
-        character.Names = updatedCharacterData.Names;
-        character.isAlive = updatedCharacterData.Alive === 'on';
-        character.Description = updatedCharacterData.Description;
-        character.abilities = updatedCharacterData.abilities.split(',').map((ability: string) => ability.trim());
-
-        // Save the updated character back to the database
-        await collection.updateOne({ ID: characterId }, { $set: character });
-
-        res.redirect(`/characters/${characterId}`); // Redirect to the character details page after updating
+        await updateCharacter(characterId, updatedCharacter);
+        res.redirect("/characters");
     } catch (error) {
         console.error("Error updating character:", error);
         res.status(500).send("Error updating character");
     }
 });
 
-
-//---------------------------------------------------------------------------------------------------- 404 HANDLER
-app.use((req, res, next) => {
-    res.status(404).send("404 - this page doesn't exist");
+//---------------------------------------------------------LOGIN
+app.get("/login", (req, res) => {
+    res.render("login");
 });
+
+app.use(session);
+
+app.post("/login", async(req, res) => {
+    const email : string = req.body.email;
+    const password : string = req.body.password;
+    try {
+        let user : User = await login(email, password);
+        delete user.password; 
+        req.session.user = user;
+        req.session.message = {type: "success", message: "Login successful"};
+        res.redirect("/");
+    } catch (e : any) {
+        req.session.message = {type: "error", message: e.message};
+        res.redirect("/login");
+    }
+});
+
+app.get("/home", async(req, res) => {
+    res.render("home");
+});
+
+app.get("/home", async(req, res) => {
+    if (req.session.user) {
+        res.render("home", {user: req.session.user});
+    } else {
+        res.redirect("/login");
+    }
+});
+
+app.get("/home", secureMiddleware, async(req, res) => {
+    res.render("home");
+});
+
+app.get("/logout", async(req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
+
+app.use(loginRouter());
+app.use(homeRouter());
+app.use(flashMiddleware);

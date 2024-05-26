@@ -1,7 +1,5 @@
 <%- include("partials/header") %>
-<header>
-    <h1>Update Character</h1>
-</header>
+<h1>Update Character</h1>
 <section>
     <form action="/characters/<%= character.ID %>/update" method="POST">
         <div>
@@ -18,9 +16,9 @@
         </div>
         <div>
             <label for="abilities">Abilities:</label>
-            <input type="text" id="abilities" name="abilities" value="<%= character.abilities.join(', ') %>" required>
+            <input type="text" id="abilities" name="abilities" value="<%= Array.isArray(character.abilities) ? character.abilities.join(', ') : '' %>">
         </div>
-        <button type="submit">Update Character</button>
+        <button type="submit">Update character</button>
     </form>
 </section>
 <%- include("partials/footer") %>

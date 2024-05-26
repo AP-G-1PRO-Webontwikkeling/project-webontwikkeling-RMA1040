@@ -7,14 +7,14 @@
 
         <label for="sortField">Sort by:</label>
         <select name="sortField">
-            <option value="Names">Name</option>
-            <option value="character.weapon_power">Power</option>
+            <option value="weapon_name" <%= sortField === "weapon_name" ? "selected" : "" %>>Name</option>
+            <option value="weapon_power" <%= sortField === "weapon_power" ? "selected" : "" %>>Power</option>
         </select>
 
         <label for="sortDirection">Sort direction:</label>
         <select name="sortDirection">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+            <option value="asc" <%= sortDirection === "asc" ? "selected" : "" %>>Ascending</option>
+            <option value="desc" <%= sortDirection === "desc" ? "selected" : "" %>>Descending</option>
         </select>
 
         <button type="submit">Apply</button>
@@ -28,12 +28,11 @@
                     <h2><%= weapon.weapon_name %></h2>
                     <img src="<%= weapon.imageUrl %>" alt="Image of <%= weapon.weapon_name %>" style="width: 300px; height:auto;">
                 </a>
-                    <p><strong>Power Level: </strong><%= weapon.weapon_power %></p>
+                <p><strong>Power Level: </strong><%= weapon.weapon_power %></p>
             </article>
         </section>
-            <% }); %>
+    <% }); %>
 <% } else { %>
     <p>No weapons found.</p>
 <% } %>
 <%- include("partials/footer") %>
-
