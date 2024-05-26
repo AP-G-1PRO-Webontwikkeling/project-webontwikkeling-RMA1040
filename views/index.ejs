@@ -1,8 +1,5 @@
 <%- include("partials/header") %>
-<h1>Welcome in the Elementex</h1>
-<section id="info">
-    <p>Welcome to The Elementex<br>Here you can find all the info about the Characters and weapons used in the Elementex Realm.</p>
-</section>
+<h1>Home</h1>
 <section>
     <form action="/" method="get">
         <label for="search">Search for a name:</label>
@@ -26,7 +23,7 @@
 
 <% if (persons && persons.length > 0) { %>
     <% persons.forEach(function(character) { %>
-        <section class="display">
+        <section>
             <article id="home">
             <a href="/characters/<%= character.ID %>">
             <h2><%= character.Names %></h2>

@@ -174,7 +174,7 @@
     "Birthday": "29-08-1980",
     "isAlive": true,
     "imageUrl": "https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/METAL.jpg",
-    "abilities":["Shape metal at will","craft weapons and armor mid-battle","near-impenetrable metallic skin"],
+    "abilities":["hape metal at will","craft weapons and armor mid-battle","near-impenetrable metallic skin"],
     "Elements": "Metal - Embodies durability, craftsmanship, and precision.",
     "Weapons":{
       "weapon_name": "Aeronaut's Exosuit",

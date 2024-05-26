@@ -1,8 +1,5 @@
 /* General styles */
 body {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
     background-image: url("https://raw.githubusercontent.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-RMA1040/main/assets/images/background1.jpeg");
     background-size: cover;
     font-family: Arial, sans-serif;
@@ -11,7 +8,7 @@ body {
     padding: 0;
     color: #333;
 }
-/*Header and footer styles */
+
 header, footer {
     background-color: #333;
     color: #fff;
@@ -23,67 +20,24 @@ header h1, footer p {
     margin: 0;
 }
 
-header {
+header{
     background-color: #333;
     color: #fff;
     padding: 10px 0;
     text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-/* Navigation styles */
-nav {
-    background-color: #333;
-    text-align: center;
-    padding: 10px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-nav li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-
-}
-
-nav a:hover {
-    color: #DB5A00;
-}
-
-#info{
-    text-align: center;
-}
-
-/* Website title styles */
-h1 {
-    color: #DB5A00;
-    font-size: 24px;
-    margin-bottom: 10px;
-    display: block;
+h1{
+    display:block;
     text-align: center;
     align-items: center;
 }
-
-h2 {
+h2{
     text-align: center;
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 10px 10px;
+    padding: 10px 10px ;
     border: 2px solid #0066cc;
     background-color: #0066cc;
     border-radius: 100px;
@@ -92,7 +46,7 @@ h2 {
     transition: background-color 0.3s ease;
 }
 
-h2:hover {
+h2:hover{
     background-color: white;
     color: #0066cc;
     transform: scale(1.05);
@@ -102,8 +56,8 @@ h2:hover {
 section {
     padding: 15px;
     max-width: 400px;
-    margin: 20px auto;
-    background-color: #D59951;
+    margin: 10px auto;
+    background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -143,4 +97,38 @@ button {
 
 button:hover {
     background-color: #005bb5;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #333;
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+nav a:hover {
+    color: #DB5A00;
+}
+
+/* Website title styles */
+h1 {
+    color: #DB5A00; /* Use one of the specified colors */
+    font-size: 24px;
+    margin-bottom: 10px;
 }
