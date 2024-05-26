@@ -1,6 +1,6 @@
 import {login} from '../mongo';
 import express from "express";
-import { User } from "../types"
+import { User } from "../types";
 import { secureMiddleware } from "../secureMiddleware";
 
 export function loginRouter() {

@@ -4,7 +4,7 @@ import { Character } from './interfaces';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from "bcrypt";
-import { User } from "./types"
+import { User } from "./types";
 
 const saltRounds : number = 10;
 

@@ -1,6 +1,14 @@
 <%- include("partials/header") %>
 <h1>Home</h1>
 <section>
+    <article>
+        <%= user.email %> is logged in.
+        <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </article>
+</section>
+<section>
     <form action="/" method="get">
         <label for="search">Search for a name:</label>
         <input type="text" id="search" name="q" value="<%= q %>">
