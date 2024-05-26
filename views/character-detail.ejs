@@ -11,6 +11,12 @@
             <p><strong>Abilities</strong><br><%= character.abilities.join(', ') %></p>
             <p><strong>Element</strong><br><%= character.Elements %></p>
             <p><strong>Weapon</strong><br><a href="/weapons-detail/<%= character.Weapons.weapon_id %>"><%= character.Weapons.weapon_name %></a></p>
+            <a href="/characters/<%= character.ID %>/update" style="display:inline;">
+                <button type="button">Update</button>
+            </a>
+            <form action="/characters/<%= character.ID %>/delete" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
         </article>
     </section>
     <%- include("partials/footer") %>

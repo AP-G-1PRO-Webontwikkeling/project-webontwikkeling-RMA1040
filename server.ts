@@ -1,11 +1,12 @@
 import express from "express";
 import ejs from "ejs";
-import path from "path";
+import path, { format } from "path";
 import { Character, Weapon } from './interfaces';
 import characters from './json/characters.json';
 import { client, connectMongo } from './mongo/mongo';
 import { connect, getUsers, createUser, deleteUser, getUserById, updateUser } from "./database";
 import { User } from "./types";
+import dotenv from "dotenv";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,8 @@ app.set("view engine", "ejs");
 app.set("port", PORT);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.set('views', path.join(__dirname, "views"));
 
 //---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
 app.listen(PORT, async () => {
@@ -119,70 +122,60 @@ app.get("/weapons-detail/:weapon_id", (req, res) => {
 });
 
 //---------------------------------------------------------------------------------------------------- USERS ROUTES
-app.get("/users", async (req, res) => {
+app.post("/characters/:id/delete", async (req, res) => {
+    const characterId = req.params.id;
     try {
-        let users: User[] = await getUsers();
-        res.render("users/index", {
-            users: users
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error fetching users");
-    }
-});
-
-app.get("/users/create", (req, res) => {
-    res.render("users/create");
-});
-
-app.post("/users/create", async (req, res) => {
-    let user: User = req.body;
-    try {
-        await createUser(user);
-        res.redirect("/users");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error creating user");
-    }
-});
-
-app.post("/users/:id/delete", async (req, res) => {
-    let id: number = parseInt(req.params.id);
-    try {
-        await deleteUser(id);
-        res.redirect("/users");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error deleting user");
-    }
-});
-
-app.get("/users/:id/update", async (req, res) => {
-    let id: number = parseInt(req.params.id);
-    try {
-        let user: User | null = await getUserById(id);
-        if (user) {
-            res.render("users/update", { user: user });
+        const index = characters.findIndex(c => c.ID === characterId);
+        if (index !== -1) {
+            characters.splice(index, 1);
+            res.redirect("/characters");
         } else {
-            res.status(404).send("User not found");
+            res.status(404).send("Character not found");
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Error fetching user");
+        console.error("Error deleting character:", error);
+        res.status(500).send("Error deleting character");
     }
 });
 
-app.post("/users/:id/update", async (req, res) => {
-    let id: number = parseInt(req.params.id);
-    let user: User = req.body;
-    try {
-        await updateUser(id, user);
-        res.redirect(`/users/${id}/update`);
-    } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).send("Error updating user");
+app.get("/characters/:id/update", (req, res) => {
+    const characterId = req.params.id;
+    const character = characters.find(c => c.ID === characterId);
+    if (character) {
+        res.render("update", { character: character });
+    } else {
+        res.status(404).send("Character not found");
     }
 });
+
+app.post("/characters/:id/update", async (req, res) => {
+    const characterId = req.params.id;
+    const updatedCharacterData = req.body;
+
+    try {
+        const collection = client.db("Elementex").collection("characters");
+        const character = await collection.findOne({ ID: characterId });
+
+        if (!character) {
+            return res.status(404).send("Character not found");
+        }
+
+        // Update the character fields with the data from the form
+        character.Names = updatedCharacterData.Names;
+        character.isAlive = updatedCharacterData.Alive === 'on';
+        character.Description = updatedCharacterData.Description;
+        character.abilities = updatedCharacterData.abilities.split(',').map((ability: string) => ability.trim());
+
+        // Save the updated character back to the database
+        await collection.updateOne({ ID: characterId }, { $set: character });
+
+        res.redirect(`/characters/${characterId}`); // Redirect to the character details page after updating
+    } catch (error) {
+        console.error("Error updating character:", error);
+        res.status(500).send("Error updating character");
+    }
+});
+
 
 //---------------------------------------------------------------------------------------------------- 404 HANDLER
 app.use((req, res, next) => {
