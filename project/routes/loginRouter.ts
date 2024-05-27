@@ -1,7 +1,7 @@
-import {login} from '../../mongo';
+import {login} from '../mongo';
 import express from "express";
-import { User } from "../../typespes";
-import { secureMiddleware } from "../../secureMiddleware";
+import { User } from "../types";
+import { secureMiddleware } from "../secureMiddleware"
 
 export function loginRouter() {
     const router = express.Router();

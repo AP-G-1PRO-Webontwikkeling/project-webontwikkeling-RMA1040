@@ -1,11 +1,8 @@
 import express from "express";
-import ejs from "ejs";
 import path from "path";
 import dotenv from "dotenv";
 import session from "./session";
 import { secureMiddleware } from "./secureMiddleware";
-import { loginRouter } from "./routes/loginRouter";
-import { homeRouter } from "./routes/homeRouter";
 import { flashMiddleware } from "./flashMiddleware";
 import { connect, getCharacters, updateCharacter, deleteCharacter, login } from './mongo';
 import { Character } from './interfaces';
