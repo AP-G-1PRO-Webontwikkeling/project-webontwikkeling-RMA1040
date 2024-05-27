@@ -4,9 +4,9 @@ import { Character } from './interfaces';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from "bcrypt";
-import { User } from "./types"
+import { User, Role } from "./types";
 
-const saltRounds : number = 10;
+const saltRounds: number = 10;
 
 dotenv.config();
 let db: Db;
@@ -55,7 +55,7 @@ export async function connect() {
         characterCollection = client.db("Elementex").collection("characters");
 
         await initializeData();
-        await createInitialUser();
+        await createInitialUsers();
 
     } catch (e) {
         console.error("Error connecting to MongoDB:", e);
@@ -83,20 +83,34 @@ export async function updateCharacter(id: string, character: Character) {
 //-----------------------------------------------------------------------------------USER MAKEN
 export const userCollection = client.db("login-express").collection<User>("users");
 
-async function createInitialUser() {
+async function createInitialUsers() {
     if (await userCollection.countDocuments() > 0) {
         return;
     }
-    let email : string | undefined = process.env.ADMIN_EMAIL;
-    let password : string | undefined = process.env.ADMIN_PASSWORD;
-    if (email === undefined || password === undefined) {
-        throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment");
+
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const userEmail = process.env.USER_EMAIL;
+    const userPassword = process.env.USER_PASSWORD;
+
+    if (!adminEmail || !adminPassword || !userEmail || !userPassword) {
+        throw new Error("All user-related environment variables must be set");
     }
-    await userCollection.insertOne({
-        email: email,
-        password: await bcrypt.hash(password, saltRounds),
-        role: "ADMIN"
-    });
+
+    const users = [
+        {
+            email: adminEmail,
+            password: await bcrypt.hash(adminPassword, saltRounds),
+            role: Role.ADMIN
+        },
+        {
+            email: userEmail,
+            password: await bcrypt.hash(userPassword, saltRounds),
+            role: Role.USER
+        }
+    ];
+
+    await userCollection.insertMany(users);
 }
 
 //---------------------------------------------------------------------------------------LOGIN FUNCTIE
@@ -104,14 +118,19 @@ export async function login(email: string, password: string) {
     if (email === "" || password === "") {
         throw new Error("Email and password required");
     }
-    let user : User | null = await userCollection.findOne<User>({email: email});
+    let user: User | null = await userCollection.findOne<User>({ email: email });
     if (user) {
+        console.log(`User found: ${user.email}`); 
+        console.log(`Comparing passwords for user: ${user.email}`);
         if (await bcrypt.compare(password, user.password!)) {
+            console.log(`Password match for user: ${user.email}`);
             return user;
         } else {
+            console.log(`Password mismatch for user: ${user.email}`);
             throw new Error("Password incorrect");
         }
     } else {
+        console.log(`User not found: ${email}`);
         throw new Error("User not found");
     }
 }

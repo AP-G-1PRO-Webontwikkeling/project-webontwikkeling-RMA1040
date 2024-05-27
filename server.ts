@@ -1,4 +1,3 @@
-// server.ts
 import express from "express";
 import ejs from "ejs";
 import path from "path";
@@ -28,16 +27,36 @@ app.set('views', path.join(__dirname, "views"));
 app.use(session);
 app.use(flashMiddleware);
 
-//------------------------------------------------DEFAULT USERS
+//---------------------------------------------------------LOGIN
+app.get("/login", (req, res) => {
+    res.render("login");
+});
 
-//---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
-app.listen(PORT, async () => {
-    await connect();
-    console.log(`Server is running on port ${PORT}`);
+app.post("/login", async(req, res) => {
+    const email : string = req.body.email;
+    const password : string = req.body.password;
+    try {
+        let user : User = await login(email, password);
+        delete user.password; 
+        req.session.user = user;
+        res.redirect("/");
+    } catch (e : any) {
+        req.session.message = {type: "error", message: e.message};
+        res.redirect("/login");
+    }
+});
+
+app.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+        }
+        res.redirect("/login");
+    });
 });
 
 //---------------------------------------------------------------------------------------------------- CHARACTERS ROUTES
-app.get("/", async (req, res) => {
+app.get("/", secureMiddleware, async (req, res) => {
     try {
         const q: string = typeof req.query.q === 'string' ? req.query.q : "";
         const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
@@ -73,7 +92,7 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.get("/characters", async (req, res) => {
+app.get("/characters", secureMiddleware, async (req, res) => {
     try {
         const q: string = typeof req.query.q === 'string' ? req.query.q : "";
         const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
@@ -108,7 +127,7 @@ app.get("/characters", async (req, res) => {
     }
 });
 
-app.get("/characters/:id", async (req, res) => {
+app.get("/characters/:id", secureMiddleware, async (req, res) => {
     try {
         const characters = await getCharacters();
         const character = characters.find(c => c.ID === req.params.id);
@@ -124,7 +143,7 @@ app.get("/characters/:id", async (req, res) => {
 });
 
 //---------------------------------------------------------------------------------------------------- WEAPONS ROUTES
-app.get('/weapons', async (req, res) => {
+app.get('/weapons', secureMiddleware, async (req, res) => {
     try {
         const characters = await getCharacters();
         const weapons = characters.flatMap(character => character.Weapons);
@@ -158,7 +177,7 @@ app.get('/weapons', async (req, res) => {
     }
 });
 
-app.get("/weapons-detail/:weapon_id", async (req, res) => {
+app.get("/weapons-detail/:weapon_id", secureMiddleware, async (req, res) => {
     try {
         const characters = await getCharacters();
         const weapons = characters.flatMap(character => character.Weapons);
@@ -176,7 +195,7 @@ app.get("/weapons-detail/:weapon_id", async (req, res) => {
 });
 
 //---------------------------------------------------------------------------------------------------- CRUD CHARACTERS ROUTES
-app.post("/characters/:id/delete", async (req, res) => {
+app.post("/characters/:id/delete", secureMiddleware, async (req, res) => {
     const characterId = req.params.id;
     try {
         await deleteCharacter(characterId);
@@ -187,7 +206,7 @@ app.post("/characters/:id/delete", async (req, res) => {
     }
 });
 
-app.get("/characters/:id/update", async (req, res) => {
+app.get("/characters/:id/update", secureMiddleware, async (req, res) => {
     try {
         const characters = await getCharacters();
         const character = characters.find(c => c.ID === req.params.id);
@@ -202,7 +221,7 @@ app.get("/characters/:id/update", async (req, res) => {
     }
 });
 
-app.post("/characters/:id/update", async (req, res) => {
+app.post("/characters/:id/update", secureMiddleware, async (req, res) => {
     const characterId = req.params.id;
     const updatedCharacter = req.body;
     try {
@@ -214,40 +233,10 @@ app.post("/characters/:id/update", async (req, res) => {
     }
 });
 
-//---------------------------------------------------------LOGIN
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
-app.post("/login", async(req, res) => {
-    const email : string = req.body.email;
-    const password : string = req.body.password;
-    try {
-        let user : User = await login(email, password);
-        delete user.password; 
-        req.session.user = user;
-        res.redirect("/");
-    } catch (e : any) {
-        req.session.message = {type: "error", message: e.message};
-        res.redirect("/login");
-    }
-});
-
-app.get("/", secureMiddleware, async(req, res) => {
-    const user = req.session.user;
-    res.render("index", {user});
-});
-
-app.use("/login", loginRouter);
-app.use("/", homeRouter);
-
-app.get("/logout", (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error("Error destroying session:", err);
-        }
-        res.redirect("/login");
-    });
+//---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
+app.listen(PORT, async () => {
+    await connect();
+    console.log(`Server is running on port ${PORT}`);
 });
 
 export default app;
