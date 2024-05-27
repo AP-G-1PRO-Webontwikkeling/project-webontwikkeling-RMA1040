@@ -1,5 +1,4 @@
 {
-  
   "name": "project-webontwikkeling-rma1040",
   "version": "1.0.0",
   "description": "",
@@ -19,7 +18,7 @@
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.18.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.12.12",
     "@types/readline-sync": "^1.4.8",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",

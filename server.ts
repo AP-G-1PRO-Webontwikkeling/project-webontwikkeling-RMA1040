@@ -1,15 +1,16 @@
+// server.ts
 import express from "express";
 import ejs from "ejs";
 import path from "path";
-import { Character } from './interfaces';
-import { connect, getCharacters,updateCharacter, deleteCharacter,login } from './mongo';
 import dotenv from "dotenv";
-import { User } from "../types"
-import session from "./session"
+import session from "./session";
 import { secureMiddleware } from "./secureMiddleware";
-import { loginRouter } from "./.project/routes/loginRouter";
-import { homeRouter } from "./.project/routes/homeRouter";
+import { loginRouter } from "./routes/loginRouter";
+import { homeRouter } from "./routes/homeRouter";
 import { flashMiddleware } from "./flashMiddleware";
+import { connect, getCharacters, updateCharacter, deleteCharacter, login } from './mongo';
+import { Character } from './interfaces';
+import { User } from "./types";
 
 dotenv.config();
 
@@ -23,6 +24,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
+
+app.use(session);
+app.use(flashMiddleware);
+
+//------------------------------------------------DEFAULT USERS
 
 //---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
 app.listen(PORT, async () => {
@@ -58,7 +64,8 @@ app.get("/", async (req, res) => {
             persons: sortedCharacters,
             sortField,
             sortDirection,
-            q
+            q,
+            user: req.session.user || null
         });
     } catch (error) {
         console.error("Error fetching characters:", error);
@@ -212,8 +219,6 @@ app.get("/login", (req, res) => {
     res.render("login");
 });
 
-app.use(session);
-
 app.post("/login", async(req, res) => {
     const email : string = req.body.email;
     const password : string = req.body.password;
@@ -228,28 +233,21 @@ app.post("/login", async(req, res) => {
     }
 });
 
-app.get("/", async(req, res) => {
-    res.render("index");
-});
-
-app.get("/", async(req, res) => {
-    if (req.session.user) {
-        res.render("index", { user: req.session.user });
-    } else {
-        res.redirect("/login");
-    }
-});
-
 app.get("/", secureMiddleware, async(req, res) => {
-    res.render("index");
+    const user = req.session.user;
+    res.render("index", {user});
 });
 
-app.get("/logout", async(req, res) => {
-    req.session.destroy(() => {
+app.use("/login", loginRouter);
+app.use("/", homeRouter);
+
+app.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+        }
         res.redirect("/login");
     });
 });
 
-app.use(loginRouter());
-app.use(homeRouter());
-app.use(flashMiddleware);
+export default app;

@@ -11,3 +11,7 @@ export interface FlashMessage {
     type: "error" | "success"
     message: string;
 }
+export enum Role {
+    ADMIN = "ADMIN",
+    USER = "USER"
+}

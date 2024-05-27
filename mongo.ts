@@ -1,14 +1,15 @@
-import { MongoClient, ServerApiVersion, Collection } from "mongodb";
+import { MongoClient, ServerApiVersion, Collection, Db } from "mongodb";
 import dotenv from "dotenv";
 import { Character } from './interfaces';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from "bcrypt";
-import { User } from "../types";
+import { User } from "./types"
 
 const saltRounds : number = 10;
 
 dotenv.config();
+let db: Db;
 
 //--------------------------------------------------------------------------------------------------------------DATABASE
 export let characterCollection: Collection<Character>;
@@ -114,5 +115,16 @@ export async function login(email: string, password: string) {
         throw new Error("User not found");
     }
 }
+
+//-----------------------------------------------------DEFAULT USER
+export const getUserByEmail = async (email: string): Promise<User | null> => {
+    const collection: Collection<User> = db.collection("users");
+    return await collection.findOne({ email });
+};
+
+export const createUser = async (user: User) => {
+    const collection: Collection<User> = db.collection("users");
+    await collection.insertOne(user);
+};
 
 export { client };
