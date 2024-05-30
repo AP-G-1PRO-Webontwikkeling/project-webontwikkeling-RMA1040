@@ -7,6 +7,7 @@ import { flashMiddleware } from "./flashMiddleware";
 import { connect, getCharacters, updateCharacter, deleteCharacter, login } from './mongo';
 import { Character } from './interfaces';
 import { User } from "./types";
+import { loginRouter } from "./routes/loginRouter";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
+app.use('/login', loginRouter());
 
 app.use(session);
 app.use(flashMiddleware);

@@ -1,7 +1,7 @@
-import {login} from '../mongo';
-import express from "express";
-import { User } from "../types";
-import { secureMiddleware } from "../secureMiddleware"
+import { login } from '../mongo';
+import express from 'express';
+import { User } from '../types';
+import { secureMiddleware } from '../secureMiddleware';
 
 export function loginRouter() {
     const router = express.Router();
@@ -17,7 +17,7 @@ export function loginRouter() {
             let user: User = await login(email, password);
             delete user.password;
             req.session.user = user;
-            res.redirect("/");
+            res.redirect("/")
         } catch (e: any) {
             res.redirect("/login");
         }
