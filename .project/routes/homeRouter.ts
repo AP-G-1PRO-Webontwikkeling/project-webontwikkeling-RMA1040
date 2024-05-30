@@ -3,8 +3,8 @@ import express from "express";
 export function homeRouter() {
     const router = express.Router();
 
-    router.get("/homr", async(req, res) => {
-        res.render("home");
+    router.get("/", async(req, res) => {
+        res.render("/");
     });
 
     return router;
