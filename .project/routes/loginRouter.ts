@@ -17,7 +17,7 @@ export function loginRouter() {
             let user: User = await login(email, password);
             delete user.password; // Remove password from user object. Sounds like a good idea.
             req.session.user = user;
-            res.redirect("/home")
+            res.redirect("/login")
         } catch (e: any) {
             res.redirect("/login");
         }
