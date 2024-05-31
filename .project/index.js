@@ -14,13 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
-const mongo_1 = require("./mongo");
 const dotenv_1 = __importDefault(require("dotenv"));
 const session_1 = __importDefault(require("./session"));
 const secureMiddleware_1 = require("./secureMiddleware");
-const loginRouter_1 = require("./.project/routes/loginRouter");
-const homeRouter_1 = require("./.project/routes/homeRouter");
 const flashMiddleware_1 = require("./flashMiddleware");
+const mongo_1 = require("./mongo");
+const loginRouter_1 = require("./routes/loginRouter");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -31,13 +30,37 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.set('views', path_1.default.join(__dirname, "views"));
-//---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
-app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, mongo_1.connect)();
-    console.log(`Server is running on port ${PORT}`);
+app.use('/login', (0, loginRouter_1.loginRouter)());
+app.use(session_1.default);
+app.use(flashMiddleware_1.flashMiddleware);
+//---------------------------------------------------------LOGIN
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const password = req.body.password;
+    try {
+        let user = yield (0, mongo_1.login)(email, password);
+        delete user.password;
+        req.session.user = user;
+        res.redirect("/");
+    }
+    catch (e) {
+        req.session.message = { type: "error", message: e.message };
+        res.redirect("/login");
+    }
 }));
+app.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+        }
+        res.redirect("/login");
+    });
+});
 //---------------------------------------------------------------------------------------------------- CHARACTERS ROUTES
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const q = typeof req.query.q === 'string' ? req.query.q : "";
         const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
@@ -59,7 +82,8 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             persons: sortedCharacters,
             sortField,
             sortDirection,
-            q
+            q,
+            user: req.session.user || null
         });
     }
     catch (error) {
@@ -67,7 +91,7 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).send("Error fetching characters");
     }
 }));
-app.get("/characters", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/characters", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const q = typeof req.query.q === 'string' ? req.query.q : "";
         const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "Names";
@@ -97,7 +121,7 @@ app.get("/characters", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).send("Error fetching characters");
     }
 }));
-app.get("/characters/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/characters/:id", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const characters = yield (0, mongo_1.getCharacters)();
         const character = characters.find(c => c.ID === req.params.id);
@@ -114,7 +138,7 @@ app.get("/characters/:id", (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 //---------------------------------------------------------------------------------------------------- WEAPONS ROUTES
-app.get('/weapons', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/weapons', secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const characters = yield (0, mongo_1.getCharacters)();
         const weapons = characters.flatMap(character => character.Weapons);
@@ -143,7 +167,7 @@ app.get('/weapons', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).send("Error fetching weapons");
     }
 }));
-app.get("/weapons-detail/:weapon_id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/weapons-detail/:weapon_id", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const characters = yield (0, mongo_1.getCharacters)();
         const weapons = characters.flatMap(character => character.Weapons);
@@ -161,7 +185,7 @@ app.get("/weapons-detail/:weapon_id", (req, res) => __awaiter(void 0, void 0, vo
     }
 }));
 //---------------------------------------------------------------------------------------------------- CRUD CHARACTERS ROUTES
-app.post("/characters/:id/delete", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/characters/:id/delete", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const characterId = req.params.id;
     try {
         yield (0, mongo_1.deleteCharacter)(characterId);
@@ -172,7 +196,7 @@ app.post("/characters/:id/delete", (req, res) => __awaiter(void 0, void 0, void 
         res.status(500).send("Error deleting character");
     }
 }));
-app.get("/characters/:id/update", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/characters/:id/update", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const characters = yield (0, mongo_1.getCharacters)();
         const character = characters.find(c => c.ID === req.params.id);
@@ -188,7 +212,7 @@ app.get("/characters/:id/update", (req, res) => __awaiter(void 0, void 0, void 0
         res.status(500).send("Error fetching character");
     }
 }));
-app.post("/characters/:id/update", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/characters/:id/update", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const characterId = req.params.id;
     const updatedCharacter = req.body;
     try {
@@ -200,44 +224,9 @@ app.post("/characters/:id/update", (req, res) => __awaiter(void 0, void 0, void 
         res.status(500).send("Error updating character");
     }
 }));
-//---------------------------------------------------------LOGIN
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-app.use(session_1.default);
-app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const password = req.body.password;
-    try {
-        let user = yield (0, mongo_1.login)(email, password);
-        delete user.password;
-        req.session.user = user;
-        res.redirect("/");
-    }
-    catch (e) {
-        req.session.message = { type: "error", message: e.message };
-        res.redirect("/login");
-    }
+//---------------------------------------------------------------------------------------------------- DATABASE CONNECTION
+app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, mongo_1.connect)();
+    console.log(`Server is running on port ${PORT}`);
 }));
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.render("index");
-}));
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.user) {
-        res.render("index", { user: req.session.user });
-    }
-    else {
-        res.redirect("/login");
-    }
-}));
-app.get("/", secureMiddleware_1.secureMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.render("index");
-}));
-app.get("/logout", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
-}));
-app.use((0, loginRouter_1.loginRouter)());
-app.use((0, homeRouter_1.homeRouter)());
-app.use(flashMiddleware_1.flashMiddleware);
+exports.default = app;

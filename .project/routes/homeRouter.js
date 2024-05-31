@@ -16,8 +16,8 @@ exports.homeRouter = void 0;
 const express_1 = __importDefault(require("express"));
 function homeRouter() {
     const router = express_1.default.Router();
-    router.get("/homr", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        res.render("home");
+    router.get("/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        res.render("/");
     }));
     return router;
 }

@@ -26,9 +26,9 @@ function loginRouter() {
         const password = req.body.password;
         try {
             let user = yield (0, mongo_1.login)(email, password);
-            delete user.password; // Remove password from user object. Sounds like a good idea.
+            delete user.password;
             req.session.user = user;
-            res.redirect("/home");
+            res.redirect("/");
         }
         catch (e) {
             res.redirect("/login");
