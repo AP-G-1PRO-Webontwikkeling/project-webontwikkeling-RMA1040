@@ -19,6 +19,13 @@
 
         <button type="submit">Apply</button>
     </form>
+    <%- include("partials/header") %>
+    <%= user.email %> is logged in.
+
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+<%- include("partials/footer") %>
 </section>
 
 <% if (persons && persons.length > 0) { %>
