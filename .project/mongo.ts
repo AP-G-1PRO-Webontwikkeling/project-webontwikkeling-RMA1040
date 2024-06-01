@@ -139,8 +139,4 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
     return await userCollection.findOne({ email });
 };
 
-export const createUser = async (user: User) => {
-    await userCollection.insertOne(user);
-};
-
 export { connect, initializeData, createInitialUsers };

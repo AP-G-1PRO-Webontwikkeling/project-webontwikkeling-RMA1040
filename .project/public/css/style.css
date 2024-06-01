@@ -140,5 +140,5 @@ h1 {
 
 /* Ensure footer stays at the bottom */
 footer {
-    flex-shrink: 0;
+    margin-top: auto;
 }
