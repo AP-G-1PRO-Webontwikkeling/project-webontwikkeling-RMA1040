@@ -75,6 +75,11 @@ app.get("/logout", async(req, res) => {
         res.redirect("/login");
     });
 });
+app.post("/logout", async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
 
 //---------------------------------------------------------------------------------------------------- CHARACTERS ROUTES
 app.get("/", secureMiddleware, async (req, res) => {
