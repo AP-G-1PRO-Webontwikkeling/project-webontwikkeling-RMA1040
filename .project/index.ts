@@ -41,6 +41,14 @@ app.use(flashMiddleware);
         console.error("Failed to start the server:", error);
     }
 })();
+
+//---------------------------------------------------------------LOGOUT
+app.post("/logout", async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
+
 //---------------------------------------------------------LOGIN
 app.get("/login", (req, res) => {
     res.render("login");
@@ -58,13 +66,6 @@ app.post("/login", async(req, res) => {
         req.session.message = {type: "error", message: e.message};
         res.redirect("/login");
     }
-});
-
-//---------------------------------------------------------------LOGOUT
-app.post("/logout", async (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
 });
 
 //---------------------------------------------------------------------------------------------------- CHARACTERS ROUTES
