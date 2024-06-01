@@ -6,24 +6,46 @@ import path from 'path';
 import bcrypt from "bcrypt";
 import { User, Role } from "./types";
 
-const saltRounds: number = 10;
-
 dotenv.config();
+
+const saltRounds: number = 10;
 let db: Db;
 
-//--------------------------------------------------------------------------------------------------------------DATABASE
+// Collections
 export let characterCollection: Collection<Character>;
+export let userCollection: Collection<User>;
 
-export const uri = process.env.MONGODB_URI || "mongodb+srv://raymondmcoding:Jonny1040@cluster0.im6apum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,    }
-});
+// MongoDB URI
+const uri = process.env.MONGODB_URI || "";
 
-//--------------------------------------------------------------------------------------------------------JSON INLEZEN
+// Initialize database connection
+async function connect() {
+    try {
+        const client = new MongoClient(uri, {
+            serverApi: {
+                version: ServerApiVersion.v1,
+                strict: true,
+                deprecationErrors: true,
+            },
+            tls: process.env.ssl === 'true', // Use SSL/TLS if specified in .env
+            tlsAllowInvalidCertificates: false, // Set this to true if using self-signed certificates
+        });
+        await client.connect();
+        db = client.db("login-express"); // Replace with your actual database name
+        characterCollection = db.collection<Character>("characters");
+        userCollection = db.collection<User>("users");
+        console.log('Connected to database');
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error('Error connecting to db:', err.message);
+        } else {
+            console.error('Unknown error:', err);
+        }
+        throw err;
+    }
+}
 
+// Initialize character data
 async function initializeData() {
     try {
         const filePath = path.join(__dirname, 'json', 'characters.json');
@@ -33,9 +55,7 @@ async function initializeData() {
         const count = await characterCollection.countDocuments();
         if (count === 0) {
             console.log("Inserting data from characters.json into the characters collection...");
-
             await characterCollection.insertMany(characters);
-
             console.log("Data inserted successfully.");
         } else {
             console.log(`Number of documents in 'characters' collection: ${count}`);
@@ -45,43 +65,7 @@ async function initializeData() {
     }
 }
 
-//------------------------------------------------------------------------VERBINDING STARTEN MET DATABASE
-export async function connect() {
-    try {
-        await client.connect();
-        console.log("Connected to MongoDB");
-
-        characterCollection = client.db("Elementex").collection("characters");
-
-        await initializeData();
-        await createInitialUsers();
-
-    } catch (e) {
-        console.error("Error connecting to MongoDB:", e);
-    }
-}
-
-//----------------------------------------------------------------------------------CHARACTERS TONEN - VERWIJDEREN - UPDATEN
-export async function getCharacters() {
-    if (!characterCollection) {
-        throw new Error("Character collection is not initialized");
-    }
-    const characters = await characterCollection.find({}).toArray();
-    console.log("Fetched characters:", characters);
-    return characters;
-}
-
-export async function deleteCharacter(id: string) {
-    return await characterCollection.deleteOne({ ID: id });
-}
-
-export async function updateCharacter(id: string, character: Character) {
-    return await characterCollection.updateOne({ ID: id }, { $set: character });
-}
-
-//-----------------------------------------------------------------------------------USER MAKEN
-export const userCollection = client.db("login-express").collection<User>("users");
-
+// Create initial users
 async function createInitialUsers() {
     if (await userCollection.countDocuments() > 0) {
         return;
@@ -112,7 +96,24 @@ async function createInitialUsers() {
     await userCollection.insertMany(users);
 }
 
-//---------------------------------------------------------------------------------------LOGIN FUNCTIE
+// Exported functions
+export async function getCharacters() {
+    if (!characterCollection) {
+        throw new Error("Character collection is not initialized");
+    }
+    const characters = await characterCollection.find({}).toArray();
+    console.log("Fetched characters:", characters);
+    return characters;
+}
+
+export async function deleteCharacter(id: string) {
+    return await characterCollection.deleteOne({ ID: id });
+}
+
+export async function updateCharacter(id: string, character: Character) {
+    return await characterCollection.updateOne({ ID: id }, { $set: character });
+}
+
 export async function login(email: string, password: string) {
     if (email === "" || password === "") {
         throw new Error("Email and password required");
@@ -134,15 +135,12 @@ export async function login(email: string, password: string) {
     }
 }
 
-//-----------------------------------------------------DEFAULT USER
 export const getUserByEmail = async (email: string): Promise<User | null> => {
-    const collection: Collection<User> = db.collection("users");
-    return await collection.findOne({ email });
+    return await userCollection.findOne({ email });
 };
 
 export const createUser = async (user: User) => {
-    const collection: Collection<User> = db.collection("users");
-    await collection.insertOne(user);
+    await userCollection.insertOne(user);
 };
 
-export { client };
+export { connect, initializeData, createInitialUsers };

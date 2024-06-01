@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import session from "./session";
 import { secureMiddleware } from "./secureMiddleware";
 import { flashMiddleware } from "./flashMiddleware";
-import { connect, getCharacters, updateCharacter, deleteCharacter, login } from './mongo';
+import { connect, getCharacters, updateCharacter, deleteCharacter, login, initializeData, createInitialUsers } from './mongo';
 import { Character } from './interfaces';
 import { User } from "./types";
 import { loginRouter } from "./routes/loginRouter";
@@ -26,6 +26,21 @@ app.use('/login', loginRouter());
 app.use(session);
 app.use(flashMiddleware);
 
+// ------------------------------------------------Connect to the database and initialize data
+(async () => {
+    try {
+        await connect();
+        await initializeData();
+        await createInitialUsers();
+
+        // Start the server after successful connection and initialization
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to start the server:", error);
+    }
+})();
 //---------------------------------------------------------LOGIN
 app.get("/login", (req, res) => {
     res.render("login");
