@@ -60,15 +60,6 @@ app.post("/login", async(req, res) => {
     }
 });
 
-app.get("/logout", (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error("Error destroying session:", err);
-        }
-        res.redirect("/login");
-    });
-});
-
 //---------------------------------------------------------------LOGOUT
 app.post("/logout", async (req, res) => {
     req.session.destroy(() => {

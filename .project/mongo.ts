@@ -16,7 +16,7 @@ export let characterCollection: Collection<Character>;
 export let userCollection: Collection<User>;
 
 // MongoDB URI
-const uri = process.env.MONGODB_URI || "";
+export const uri = process.env.MONGODB_URI || "";
 
 // Initialize database connection
 async function connect() {
