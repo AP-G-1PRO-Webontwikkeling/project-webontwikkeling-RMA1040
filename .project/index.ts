@@ -43,12 +43,11 @@ app.use(flashMiddleware);
 })();
 
 //---------------------------------------------------------------LOGOUT
-app.post("/logout", async (req, res) => {
+app.get("/logout", async(req, res) => {
     req.session.destroy(() => {
         res.redirect("/login");
     });
 });
-
 //---------------------------------------------------------LOGIN
 app.get("/login", (req, res) => {
     res.render("login");
